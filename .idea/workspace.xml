@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57f06bdf-7fa6-4575-87e4-58728171ae39" name="Changes" comment="Correction on component lifespans">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simulation.py" afterDir="false" />
+    <list default="true" id="57f06bdf-7fa6-4575-87e4-58728171ae39" name="Changes" comment="Initial component state simulation">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,7 +88,7 @@
       <updated>1673895313096</updated>
       <workItem from="1673895314236" duration="1498000" />
       <workItem from="1673896822838" duration="2174000" />
-      <workItem from="1673899094357" duration="1642000" />
+      <workItem from="1673899094357" duration="3443000" />
     </task>
     <task id="LOCAL-00001" summary="Install fiabilipy and create system block diagram">
       <created>1673897587152</created>
@@ -111,7 +111,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673897755078</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Initial component state simulation">
+      <created>1673901332418</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1673901332418</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -121,9 +128,10 @@
     <MESSAGE value="Install fiabilipy and create system block diagram" />
     <MESSAGE value="Correction on system block diagram" />
     <MESSAGE value="Correction on component lifespans" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correction on component lifespans" />
+    <MESSAGE value="Initial component state simulation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial component state simulation" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/reliability_computational_2023$simulation.coverage" NAME="simulation Coverage Results" MODIFIED="1673901230784" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/reliability_computational_2023$simulation.coverage" NAME="simulation Coverage Results" MODIFIED="1673902171400" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

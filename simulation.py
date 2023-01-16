@@ -1,3 +1,5 @@
+import math
+import random
 from enum import Enum
 
 
@@ -19,7 +21,7 @@ components = {
 
 component_study_time = 100  # Hours
 system_study_time = 30  # Hours
-timestep = 1 # Hours
+timestep = 1  # Hours
 
 steps = {
     '1': [components['c1']],
@@ -29,6 +31,10 @@ steps = {
 }
 
 
+def poisson_pdf(lamda, k) -> float:
+    return (lamda ** k) * (math.e ** (-1 * lamda)) / math.factorial(k)
+
+
 def component_simulation():
     for time in range(0, component_study_time, timestep):
         for component in components.values():
@@ -36,8 +42,16 @@ def component_simulation():
                 continue
 
             if time / component_study_time > component['DutyCycle']:
+                print('Component ended duty cycle')
                 component['State'] = States.NOT_WORKING
-                print(component)
+                continue
+
+            lamda = 1 / component['MTTF']
+            chance_of_failing = poisson_pdf(lamda, time)
+
+            if random.random() > chance_of_failing:
+                print('Component Failed')
+                component['State'] = States.BROKEN
 
 
 if __name__ == "__main__":
