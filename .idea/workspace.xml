@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57f06bdf-7fa6-4575-87e4-58728171ae39" name="Changes" comment="Refactor into class based components">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation.py" afterDir="false" />
-    </list>
+    <list default="true" id="57f06bdf-7fa6-4575-87e4-58728171ae39" name="Changes" comment="Add failure time averaging" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -125,7 +122,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673946751103</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Add failure time averaging">
+      <created>1673954566849</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1673954566849</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -137,9 +141,10 @@
     <MESSAGE value="Correction on component lifespans" />
     <MESSAGE value="Initial component state simulation" />
     <MESSAGE value="Refactor into class based components" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor into class based components" />
+    <MESSAGE value="Add failure time averaging" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add failure time averaging" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/reliability_computational_2023$simulation.coverage" NAME="simulation Coverage Results" MODIFIED="1673953629447" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/reliability_computational_2023$simulation.coverage" NAME="simulation Coverage Results" MODIFIED="1673954476731" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
