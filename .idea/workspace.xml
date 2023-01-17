@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="57f06bdf-7fa6-4575-87e4-58728171ae39" name="Changes" comment="Initial component state simulation">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/reliability-computational-2023.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/reliability-computational-2023.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation.py" afterDir="false" />
     </list>
@@ -39,7 +41,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/home/antonis/dev/reliability-computational-2023",
+    "last_opened_file_path": "/Users/antonis/Developer/reliability-computational-2023",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -57,7 +59,6 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="$PROJECT_DIR$/venv/bin/python" />
-      <option name="SDK_NAME" value="Python 3.9 (reliability-computational-2023)" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -89,6 +90,7 @@
       <workItem from="1673895314236" duration="1498000" />
       <workItem from="1673896822838" duration="2174000" />
       <workItem from="1673899094357" duration="3443000" />
+      <workItem from="1673946212744" duration="445000" />
     </task>
     <task id="LOCAL-00001" summary="Install fiabilipy and create system block diagram">
       <created>1673897587152</created>

@@ -9,26 +9,34 @@ class States(Enum):
     BROKEN = 2
 
 
-components = {
-    'c1': {"MTTF": 30, "DutyCycle": 0.3, "MTTR": 12, "State": States.WORKING},
-    'c2': {"MTTF": 24, "DutyCycle": 1, "MTTR": 12, "State": States.WORKING},
-    'c3': {"MTTF": 23, "DutyCycle": 1, "MTTR": 12, "State": States.WORKING},
-    'c4': {"MTTF": 24, "DutyCycle": 1, "MTTR": 10, "State": States.WORKING},
-    'c5': {"MTTF": 27, "DutyCycle": 1, "MTTR": 10, "State": States.WORKING},
-    'c6': {"MTTF": 28, "DutyCycle": 1, "MTTR": 8, "State": States.WORKING},
-    'c7': {"MTTF": 33, "DutyCycle": 0.4, "MTTR": 12, "State": States.WORKING},
-}
+class Component:
+    def __init__(self, name, mttf, duty_cycle, mttr):
+        self.name = name
+        self.mttf = mttf
+        self.duty_cycle = duty_cycle
+        self.mttr = mttr
+        self.state = States.WORKING
+
+    def simulate(self, time) -> float:
+        if self.state != States.WORKING:
+            return
+
+        if time / component_study_time > self.duty_cycle:
+            print('Component ended duty cycle')
+            self.state = States.NOT_WORKING
+            return
+
+        lamda = 1 / self.mttf
+        chance_of_failing = poisson_pdf(lamda, time)
+
+        if random.random() > chance_of_failing:
+            print('Component Failed')
+            self.state = States.BROKEN
+
 
 component_study_time = 100  # Hours
 system_study_time = 30  # Hours
 timestep = 1  # Hours
-
-steps = {
-    '1': [components['c1']],
-    '2': [components['c2'], components['c3'], components['c4']],
-    '3': [components['c5'], components['c6']],
-    '4': [components['c7']]
-}
 
 
 def poisson_pdf(lamda, k) -> float:
@@ -37,22 +45,26 @@ def poisson_pdf(lamda, k) -> float:
 
 def component_simulation():
     for time in range(0, component_study_time, timestep):
-        for component in components.values():
-            if component['State'] != States.WORKING:
-                continue
-
-            if time / component_study_time > component['DutyCycle']:
-                print('Component ended duty cycle')
-                component['State'] = States.NOT_WORKING
-                continue
-
-            lamda = 1 / component['MTTF']
-            chance_of_failing = poisson_pdf(lamda, time)
-
-            if random.random() > chance_of_failing:
-                print('Component Failed')
-                component['State'] = States.BROKEN
+        for component in components:
+            component.simulate(time)
 
 
 if __name__ == "__main__":
+    c1 = Component('c1', 30, 0.3, 12)
+    c2 = Component('c2', 24, 1, 12)
+    c3 = Component('c3', 23, 1, 12)
+    c4 = Component('c4', 24, 1, 10)
+    c5 = Component('c5', 27, 1, 10)
+    c6 = Component('c6', 28, 1, 8)
+    c7 = Component('c7', 33, 0.4, 12)
+
+    components = [c1, c2, c3, c4, c5, c6, c7]
+
+    steps = {
+        '1': [c1],
+        '2': [c2, c3, c4],
+        '3': [c5, c6],
+        '4': [c7]
+    }
+
     component_simulation()
