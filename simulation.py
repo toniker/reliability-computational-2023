@@ -16,24 +16,25 @@ class Component:
         self.duty_cycle = duty_cycle
         self.mttr = mttr
         self.state = States.WORKING
+        self.failure_times = []
 
-    def simulate(self, time) -> float:
+    def simulate(self, time):
         if self.state != States.WORKING:
             return
 
         if time / component_study_time > self.duty_cycle:
-            print('Component ended duty cycle')
             self.state = States.NOT_WORKING
             return
 
         lamda = 1 / self.mttf
-        chance_of_failing = poisson_pdf(lamda, time)
+        chance_of_failing = 1 - poisson_pdf(lamda, 1)
 
         if random.random() > chance_of_failing:
-            print('Component Failed')
+            self.failure_times.append(time)
             self.state = States.BROKEN
 
 
+number_of_runs = 100
 component_study_time = 100  # Hours
 system_study_time = 30  # Hours
 timestep = 1  # Hours
@@ -44,6 +45,9 @@ def poisson_pdf(lamda, k) -> float:
 
 
 def component_simulation():
+    for component in components:
+        component.state = States.WORKING
+
     for time in range(0, component_study_time, timestep):
         for component in components:
             component.simulate(time)
@@ -67,4 +71,15 @@ if __name__ == "__main__":
         '4': [c7]
     }
 
-    component_simulation()
+    for run in range(number_of_runs):
+        component_simulation()
+
+    for component in components:
+        if len(component.failure_times) == 0:
+            continue
+
+        time_sum = 0
+        for failure_time in component.failure_times:
+            time_sum += failure_time
+
+        print(f'{component.name} failure Time: {time_sum / len(component.failure_times):.2f}')
