@@ -33,11 +33,18 @@ class Component:
             self.failure_times.append(time)
             self.state = States.BROKEN
 
+    def repair(self):
+        if self.state != States.BROKEN:
+            return
 
-number_of_runs = 100
-component_study_time = 100  # Hours
-system_study_time = 30  # Hours
-timestep = 1  # Hours
+        lamda = 1 / self.mttr
+        chance_of_repairing = 1 - poisson_pdf(lamda, 1)
+
+        if random.random() > chance_of_repairing:
+            self.state = States.WORKING
+
+    def reset(self):
+        self.state = States.WORKING
 
 
 def poisson_pdf(lamda, k) -> float:
@@ -46,7 +53,7 @@ def poisson_pdf(lamda, k) -> float:
 
 def component_simulation():
     for component in components:
-        component.state = States.WORKING
+        component.reset()
 
     for time in range(0, component_study_time, timestep):
         for component in components:
