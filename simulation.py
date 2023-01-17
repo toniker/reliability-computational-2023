@@ -62,11 +62,11 @@ def component_simulation():
 
 if __name__ == "__main__":
     c1 = Component(name='c1', mttf=30, duty_cycle=0.3, mttr=12)
-    c2 = Component(name='c2', mttf=24, duty_cycle=1, mttr=12)
-    c3 = Component(name='c3', mttf=23, duty_cycle=1, mttr=12)
-    c4 = Component(name='c4', mttf=24, duty_cycle=1, mttr=10)
-    c5 = Component(name='c5', mttf=27, duty_cycle=1, mttr=10)
-    c6 = Component(name='c6', mttf=28, duty_cycle=1, mttr=8)
+    c2 = Component(name='c2', mttf=24, duty_cycle=1,   mttr=12)
+    c3 = Component(name='c3', mttf=23, duty_cycle=1,   mttr=12)
+    c4 = Component(name='c4', mttf=24, duty_cycle=1,   mttr=10)
+    c5 = Component(name='c5', mttf=27, duty_cycle=1,   mttr=10)
+    c6 = Component(name='c6', mttf=28, duty_cycle=1,   mttr=8)
     c7 = Component(name='c7', mttf=33, duty_cycle=0.4, mttr=12)
 
     components = [c1, c2, c3, c4, c5, c6, c7]
