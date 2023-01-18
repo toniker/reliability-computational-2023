@@ -1,7 +1,8 @@
-import math
-import random
 from enum import Enum
+import random
 
+import numpy as np
+from scipy.stats import expon
 
 class States(Enum):
     WORKING = 0
@@ -16,7 +17,8 @@ class Component:
         self.duty_cycle = duty_cycle
         self.mttr = mttr
         self.state = States.WORKING
-        self.failure_times = []
+        self.failure_times = np.empty(0)
+        self.expon = expon(scale=mttf)
 
     def simulate(self, time):
         if self.state != States.WORKING:
@@ -26,42 +28,39 @@ class Component:
             self.state = States.NOT_WORKING
             return
 
-        lamda = 1 / self.mttf
-        chance_of_failing = 1 - poisson_pdf(lamda, 1)
+        failure_chance = 1 - np.exp(-time / self.mttf)
 
-        if random.random() > chance_of_failing:
-            self.failure_times.append(time)
+        random_number = np.random.uniform(0, 1)
+        if random_number < failure_chance:
             self.state = States.BROKEN
-
-    def repair(self):
-        if self.state != States.BROKEN:
-            return
-
-        lamda = 1 / self.mttr
-        chance_of_repairing = 1 - poisson_pdf(lamda, 1)
-
-        if random.random() > chance_of_repairing:
-            self.state = States.WORKING
-
-    def reset(self):
-        self.state = States.WORKING
+            self.failure_times = np.append(self.failure_times, time)
 
 
-def poisson_pdf(lamda, k) -> float:
-    return (lamda ** k) * (math.e ** (-1 * lamda)) / math.factorial(k)
+def reset_components():
+    for component in components:
+        component.state = States.WORKING
 
 
 def component_simulation():
+    for run in range(number_of_runs):
+        reset_components()
+
+        for time in range(component_study_time):
+            c1.simulate(time)
+            # for component in components:
+            #     component.simulate(time)
+
     for component in components:
-        component.reset()
-
-    for time in range(0, component_study_time, timestep):
-        for component in components:
-            component.simulate(time)
+        actual_mttf = np.average(component.failure_times)
+        print(f'{component.name} experimental MTTF: {actual_mttf:.2f}')
+        print(f'{component.name} experimental λ: {1 / actual_mttf:.2f}')
 
 
-def main():
-    number_of_runs = 100
+if __name__ == "__main__":
+    component_study_time = 100  # Hours
+    system_study_time = 30  # Hours
+    timestep = 1  # Hours
+    number_of_runs = 1000
 
     c1 = Component(name='c1', mttf=30, duty_cycle=0.3, mttr=12)
     c2 = Component(name='c2', mttf=24, duty_cycle=1, mttr=12)
@@ -80,24 +79,5 @@ def main():
         '4': [c7]
     }
 
-    for run in range(number_of_runs):
-        component_simulation()
-
-    for component in components:
-        if len(component.failure_times) == 0:
-            continue
-
-        time_sum = 0
-        for failure_time in component.failure_times:
-            time_sum += failure_time
-
-        print(f'{component.name} failure Time: {time_sum / len(component.failure_times):.2f}')
-
-
-if __name__ == "__main__":
-    component_study_time = 100  # Hours
-    system_study_time = 30  # Hours
-    timestep = 1  # Hours
-
-    main()
+    component_simulation()
 
