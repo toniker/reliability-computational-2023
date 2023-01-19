@@ -118,14 +118,14 @@ def simulate_components(repair):
     print(f'\n --------- Repair = {repair} ---------')
     print(df)
 
-    # plt.figure()
-    # plt.title('MTTF Histogram')
-    # plt.hist(df['MTTF'], orientation='horizontal')
-    # plt.xlabel('Number of components')
-    # plt.ylabel("Components")
-    # plt.grid()
-    # plt.figure()
-    # plt.show()
+    if not repair:
+        for component in components:
+            plt.figure()
+            plt.title(f'MTTF Histogram for {component.name}')
+            plt.hist(component.ttf, orientation='horizontal')
+            plt.xlabel('$study time$')
+            plt.grid()
+            plt.show()
 
 
 def simulate_system(repair):
@@ -181,12 +181,12 @@ def simulate_system(repair):
                     system.state = "Working"
                     system.ttf.append(time - system.last_failure)
 
-    # system.mttf = np.average(system.ttf)
-    # system.mttr = np.average(system.ttr)
-    # results = [system.mttf, system.mttr]
-    #
-    # df = pd.DataFrame(results, columns=['MTTF', 'MTTR'])
-    # print(df)
+    system.mttf = np.average(system.ttf)
+    system.mttr = np.average(system.ttr)
+    results = [system.mttf, system.mttr]
+
+    # df = pd.DataFrame(results, columns=['MTTF', 'MTTR']) # Crashes because results array is empty since we
+    # print(df) # haven't figured out how to get the states of each component
 
 
 if __name__ == "__main__":
