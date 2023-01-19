@@ -1,4 +1,7 @@
+import math
+
 import numpy as np
+import pandas as pd
 
 
 class Component:
@@ -8,15 +11,19 @@ class Component:
         self.duty_cycle = duty_cycle
         self.mttr = mttr
         self.state = "Working"
-        self.ttf = np.zeros(1)
-        self.ttr = np.zeros(1)
+        self.ttf = [] # To fill
+        self.ttr = [] # To fill
 
-    def print_results(self):
+    def get_results(self):
         mttf = np.average(self.ttf)
         mttr = np.average(self.ttr)
-        print(f'{self.name} MTTF: {mttf:.2f}')
+        # print(f'{self.name} MTTF: {mttf:.2f}')
+        # print(f'{self.name} Reliability: {:.4f}')
         # print(f'{self.name} λ: {1 / mttf:.3f}')
-        print(f'{self.name} MTTR: {mttr:.1f}')
+        # print(f'{self.name} MTTR: {mttr:.1f}')
+        reliability = math.exp(-component_study_time / mttf)
+        lamda = 1 / mttf
+        return self.name, reliability, lamda
 
     def get_state(self, point_in_time):
         if self.state == "Not Working":
@@ -38,7 +45,7 @@ class Component:
         if self.state != "Working":
             return
 
-        last_repair_time = self.ttr[-1]
+        last_repair_time = 0
         time_until_failure = np.random.exponential(self.mttf)
 
         if time_until_failure + last_repair_time >= self.duty_cycle * study_time:
@@ -77,8 +84,13 @@ def simulate_components(repair):
                 if repair is True and component.state == "Broken":
                     component.simulate_repair(component_study_time)
 
+    df = pd.DataFrame()
     for component in components:
-        component.print_results()
+        name, reliability, lamda = component.get_results()
+        data = pd.DataFrame({'Name': name, 'Reliability': reliability, 'λ': lamda}) # To fix
+        df.append(data)
+
+    print(df)
 
 
 def simulate_system(repair):
