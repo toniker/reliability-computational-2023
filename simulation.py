@@ -2,6 +2,7 @@ import math
 
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 
 class System:
@@ -10,6 +11,8 @@ class System:
         self.ttr = []
         self.mttr = []
         self.mttf = []
+        self.last_failure = np.inf
+        self.last_repair = 0
         self.state = "Working"
 
 
@@ -20,19 +23,24 @@ class Component:
         self.duty_cycle = duty_cycle
         self.mttr = mttr
         self.state = "Working"
-        self.ttf = []  # To fill
-        self.ttr = []  # To fill
+        self.ttf = []
+        self.ttr = []
         self.last_failure_time = np.inf
         self.last_repair_time = 0
 
-    def get_results(self, study_time):
+    def get_results(self, study_time, repair):
         total_study_time = number_of_runs * study_time * self.duty_cycle
+
         mttf = round(np.average(self.ttf), 2)
-        mttr = round(np.average(self.ttr), 2)
         reliability = round(math.exp(-component_study_time / mttf), 2)
         lamda = round(1 / mttf, 2)
+        if repair:
+            mttr = round(np.average(self.ttr), 2)
+            mtbr = round(total_study_time / len(self.ttr), 2)
+        else:
+            mtbr = 0
+            mttr = 0
         mtbf = round(total_study_time / len(self.ttf), 2)
-        mtbr = round(total_study_time / len(self.ttr), 2)
         mut = round(np.sum(self.ttf) / total_study_time, 2)
         mdt = 1 - mut
         availability = mut / (mut + mdt)
@@ -86,7 +94,6 @@ class Component:
 
 def simulate_components(repair):
     for component in components:
-        component.state = "Working"
         component.ttf = np.empty(0)
         component.ttr = np.empty(0)
 
@@ -104,11 +111,21 @@ def simulate_components(repair):
     results = []
 
     for component in components:
-        results += [component.get_results(component_study_time)]
+        results += [component.get_results(component_study_time, repair)]
 
     df = pd.DataFrame(results, columns=['Name', 'Reliability', 'λ', 'MTTF', 'MTTR', 'MTBF', 'MTBR', 'MUT', 'MDT',
                                         'Availability'])
+    print(f'\n --------- Repair = {repair} ---------')
     print(df)
+
+    # plt.figure()
+    # plt.title('MTTF Histogram')
+    # plt.hist(df['MTTF'], orientation='horizontal')
+    # plt.xlabel('Number of components')
+    # plt.ylabel("Components")
+    # plt.grid()
+    # plt.figure()
+    # plt.show()
 
 
 def simulate_system(repair):
@@ -119,7 +136,7 @@ def simulate_system(repair):
         '4': [c7]
     }
 
-    system_ttf = np.empty(0)
+    system = System()
 
     for component in components:
         # Reset the component arrays from previous simulations
@@ -141,8 +158,8 @@ def simulate_system(repair):
 
         # Having all the values for the component failure and repair states, get the status of the system
         # step of the way
-        steps_passing = []
         for time in range(system_study_time):
+            steps_passing = []
             for step in steps.values():
                 step_passes = False
 
@@ -151,11 +168,25 @@ def simulate_system(repair):
                         step_passes = True
 
                 steps_passing += [step_passes]
+            if system.state == "Working":
+                # If any step of the system fails, then the whole system fails
+                if False in steps_passing:
+                    system.last_failure = time
+                    system.state = "Not Working"
+                    system.ttf.append(time - system.last_repair)
+            else:
+                # The system was already in a non-working state, but it is now
+                if False not in steps_passing:
+                    system.last_repair = time
+                    system.state = "Working"
+                    system.ttf.append(time - system.last_failure)
 
-            # If any step of the system fails, then the whole system fails
-            if False in steps_passing:
-                system_ttf += time - system_ttf[-1]  # Rewrite this. If the system is down for 4 hours, we get
-                # MTTF = [x 1 1 1]
+    # system.mttf = np.average(system.ttf)
+    # system.mttr = np.average(system.ttr)
+    # results = [system.mttf, system.mttr]
+    #
+    # df = pd.DataFrame(results, columns=['MTTF', 'MTTR'])
+    # print(df)
 
 
 if __name__ == "__main__":
@@ -172,6 +203,8 @@ if __name__ == "__main__":
     c7 = Component(name='C7', mttf=33, duty_cycle=0.4, mttr=12)
 
     components = [c1, c2, c3, c4, c5, c6, c7]
-    # components = [c1]
 
+    simulate_components(repair=False)
     simulate_components(repair=True)
+    simulate_system(repair=False)
+    simulate_system(repair=True)
