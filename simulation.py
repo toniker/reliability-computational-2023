@@ -1,3 +1,4 @@
+import math
 from enum import Enum
 
 import numpy as np
@@ -21,31 +22,39 @@ class Component:
         self.duty_cycle = duty_cycle
         self.mttr = mttr
         self.state = States.WORKING
-        self.failure_times = np.empty(0)
+        self.time_alive = np.empty(0)
 
     def restore(self):
         self.state = States.WORKING
 
     def reset(self):
         self.state = States.WORKING
-        self.failure_times = np.empty()
+        self.time_alive = np.empty(0)
 
-    def simulate(self, time):
+    def print_results(self):
+        mttf = np.average(self.time_alive)
+        print(f'{self.name} MTTF: {mttf:.2f}')
+        print(f'{self.name} λ: {1 / mttf:.3f}')
+        # How do I get R?
+
+    def simulate_failure(self, study_time) -> bool:
         if self.state != States.WORKING:
-            return
+            return False
 
-        if time / component_study_time > self.duty_cycle:
-            self.failure_times = np.append(self.failure_times, time)
-            self.state = States.NOT_WORKING
-            return
-
+        # Get the time the component will fail
         lamda = 1 / self.mttf
-        failure_chance = lamda * np.exp(-time * lamda)
-        random_number = np.random.uniform(0, 1)
+        component_fail_time = np.random.exponential(1 / lamda)
 
-        if random_number < failure_chance:
+        #  Component fails before ending duty cycle
+        if component_fail_time <= self.duty_cycle * study_time:
+            self.time_alive = np.append(self.time_alive, component_fail_time)
             self.state = States.BROKEN
-            self.failure_times = np.append(self.failure_times, time)
+            return False
+
+        #  Component ends duty cycle without breaking
+        self.state = States.NOT_WORKING
+        self.time_alive = np.append(self.time_alive, self.duty_cycle * study_time)
+        return True
 
 
 def component_simulation():
@@ -55,15 +64,10 @@ def component_simulation():
     for run in range(number_of_runs):
         for component in components:
             component.restore()
-
-        for time in range(component_study_time):
-            for component in components:
-                component.simulate(time)
+            component.simulate_failure(component_study_time)
 
     for component in components:
-        actual_mttf = np.average(component.failure_times)
-        print(f'{component.name} experimental MTTF: {actual_mttf:.2f}')
-        print(f'{component.name} experimental λ: {1 / actual_mttf:.2f}')
+        component.print_results()
 
 
 def system_simulation():
@@ -87,12 +91,13 @@ def system_simulation():
             steps_passing = []
 
             for step in steps.values():
+                step_passing = False
                 for component in step:
-                    component.simulate(time)
+                    component.simulate_failure(system_study_time)
                     if component.state is States.WORKING:
-                        steps_passing += [True]
-                    else:
-                        steps_passing += [False]
+                        step_passing = True
+
+                steps_passing += [step_passing]
 
             if False in steps_passing:
                 system.mttf = np.append(system.mttf, time)
