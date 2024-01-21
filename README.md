@@ -1,1 +1,5 @@
 # reliability-computational-2023
+
+The Python script titled `theoretical.py` is simulating the reliability and Mean Time To Failure (MTTF) of a system composed of multiple components. It calculates the reliability and MTTF of individual components based on their failure rates, and then computes the overall system MTTF based on the arrangement of these components in the system. The script uses exponential distribution and reliability formulas to perform these calculations.
+
+The Python script titled `simulation.py` simulates the behavior of a system composed of multiple components. It models the failure and repair processes of each component, calculates various reliability metrics such as Mean Time To Failure (MTTF), Mean Time To Repair (MTTR), Mean Time Between Failures (MTBF), and availability. Additionally, it simulates the overall system behavior based on the states of its individual components, determining the system's overall reliability and failure characteristics. The simulation is based on the specified study times, duty cycles, failure rates, and repair times of the components.
